@@ -2,6 +2,9 @@ import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import { connectToDatabase } from './config/database';
 import { schema } from './schema';
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const app = express();
 const server = new ApolloServer({
@@ -10,10 +13,10 @@ const server = new ApolloServer({
 
 function startServer() {
     try {
-        connectToDatabase().then(() => {
+        connectToDatabase(process.env.MONGODB_URI || "").then(() => {
             server.start().then(() => {
                 server.applyMiddleware({ app, path: '/graphql' });
-                app.listen({ port: 4000 }, () => {
+                app.listen({ port: process.env.PORT }, () => {
                     console.log(`🚀 Server ready at http://localhost:4000/graphql`)
                 });
             });

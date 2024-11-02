@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-function connectToDatabase(): Promise<void> {
-    return mongoose.connect('mongodb://localhost:27017/fruitstorage').then(() => {
-        console.log('Connected to MongoDB');
+function connectToDatabase(uri: string): Promise<void> {
+    return mongoose.connect(uri).then(() => {
+        console.log('Connected to MongoDB', uri);
     }).catch((error) => {
         console.error('Failed to connect to MongoDB', error);
         throw error;
