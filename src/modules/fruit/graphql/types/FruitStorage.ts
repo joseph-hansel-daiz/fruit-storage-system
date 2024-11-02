@@ -1,4 +1,3 @@
-// src/application/graphql/types/Fruit.ts
 import { objectType } from 'nexus';
 
 export const FruitStorage = objectType({
