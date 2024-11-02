@@ -1,5 +1,5 @@
 import fruitStorageService from '../application/FruitStorageService';
-import { executeScript } from '../../../common/tests/testUtils';
+import { executeScript } from '../../../common/tests/testConfig';
 import { FRUIT_STORAGE_ERRORS } from '../domain/errors';
 
 afterEach(async () => {
