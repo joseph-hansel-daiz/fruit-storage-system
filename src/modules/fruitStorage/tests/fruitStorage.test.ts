@@ -55,7 +55,7 @@ describe('createFruitForFruitStorage', () => {
 
     expect(duplicateResult.errors).toBeDefined();
     if (duplicateResult.errors) {
-      expect(duplicateResult.errors[0].message).toBe(FRUIT_STORAGE_ERRORS.CANNOT_CREATE);
+      expect(duplicateResult.errors[0].message).toBe(FRUIT_STORAGE_ERRORS.CANNOT_CREATE_EXISTING_FRUIT);
     }
   });
 });

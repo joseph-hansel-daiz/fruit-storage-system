@@ -10,6 +10,16 @@ export class FruitStorageService {
     constructor(private fruitRepository: IFruitStorageRepository, private outboxEventService: OutboxEventService) { }
 
     public async createFruitStorage(name: string, description: string, limitOfFruitToBeStored: number): Promise<FruitStorage> {
+        let existingFruitStorage: FruitStorage | null = null;
+
+        try {
+            existingFruitStorage = await this.fruitRepository.findByName(name);
+        } catch (error) { }
+
+        if (existingFruitStorage) {
+            throw new Error (FRUIT_STORAGE_ERRORS.CANNOT_CREATE_EXISTING_FRUIT);
+        }
+
         const fruit = FruitStorage.create(name, description, limitOfFruitToBeStored);
         await this.fruitRepository.save(fruit);
         await this.outboxEventService.createEvent(FRUIT_STORAGE_EVENTS.CREATE, FruitStorageMap.toDTO(fruit))
