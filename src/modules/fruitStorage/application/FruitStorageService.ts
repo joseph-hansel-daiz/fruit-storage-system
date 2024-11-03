@@ -54,7 +54,7 @@ export class FruitStorageService {
         return fruit;
     }
 
-    public async findFruitStorage(name: string): Promise<FruitStorage> {
+    public async findFruit(name: string): Promise<FruitStorage> {
         return this.fruitRepository.findByName(name);
     }
 

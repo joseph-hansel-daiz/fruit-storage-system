@@ -195,7 +195,7 @@ describe('removeFruitFromFruitStorage', () => {
   });
 });
 
-describe('findFruitStorage', () => {
+describe('findFruit', () => {
   beforeEach(async () => {
     await fruitStorageService.createFruitStorage("lemon", "this is a lemon", 10)
   });
@@ -203,20 +203,20 @@ describe('findFruitStorage', () => {
   it('should find and return the lemon object', async () => {
     const result = await executeScript(`
       query {
-        findFruitStorage(name: "lemon") {
+        findFruit(name: "lemon") {
           name
           description
         }
       }
     `);
 
-    expect(result.data?.findFruitStorage.name).toBe('lemon');
+    expect(result.data?.findFruit.name).toBe('lemon');
   });
 
   it('should throw an error if fruit is not found', async () => {
     const result = await executeScript(`
       query {
-        findFruitStorage(name: "not a lemon") {
+        findFruit(name: "not a lemon") {
           name
         }
       }
