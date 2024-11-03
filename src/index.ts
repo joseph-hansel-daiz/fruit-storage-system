@@ -3,6 +3,7 @@ import express from 'express';
 import { connectToDatabase } from './config/database';
 import { schema } from './schema';
 import dotenv from 'dotenv'
+import "./common/cron";
 
 dotenv.config()
 
