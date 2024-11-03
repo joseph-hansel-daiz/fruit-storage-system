@@ -7,11 +7,11 @@ import OutboxMap from "./OutboxMapper";
 
 export class OutboxEventRepository implements IOutboxEventRepository {
     public async findById(id: string): Promise<OutboxEvent> {
-        const document = await OutboxEventModel.find({ _id: new ObjectId(id) })
+        const document = await OutboxEventModel.find({ _id: new ObjectId(id) }).lean();
         return OutboxMap.toDomain(document);
     }
     public async findByStatus(status: OutboxEventStatus): Promise<OutboxEvent[]> {
-        const documents = await OutboxEventModel.find({ status: status })
+        const documents = await OutboxEventModel.find({ status: status }).lean();
         return documents.map((document) => {
             return OutboxMap.toDomain(document)
         });
