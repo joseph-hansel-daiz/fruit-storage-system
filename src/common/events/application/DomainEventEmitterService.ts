@@ -1,5 +1,5 @@
-import { EventEmitter } from 'events';
-import { OutboxEvent } from '../domain/OutboxEvent';
+import { EventEmitter } from "events";
+import { OutboxEvent } from "../domain/OutboxEvent";
 
 export class DomainEventEmitterService {
   private emitter: EventEmitter;

@@ -1,6 +1,8 @@
-import { FruitStorage } from '../domain/FruitStorage';
-import { FruitStorageDTO } from '../dtos/FruitStorageDTO';
-import FruitStorageModel, { IFruitStorageDocument } from './mongoDB/FruitStorageModel';
+import { FruitStorage } from "../domain/FruitStorage";
+import { FruitStorageDTO } from "../dtos/FruitStorageDTO";
+import FruitStorageModel, {
+  IFruitStorageDocument,
+} from "./mongoDB/FruitStorageModel";
 
 export default class FruitStorageMap {
   public static toDTO(fruitStorage: FruitStorage): FruitStorageDTO {
@@ -8,8 +10,8 @@ export default class FruitStorageMap {
       name: fruitStorage.name,
       description: fruitStorage.description,
       limitOfFruitToBeStored: fruitStorage.limitOfFruitToBeStored,
-      amountInStorage: fruitStorage.amountInStorage
-    }
+      amountInStorage: fruitStorage.amountInStorage,
+    };
   }
 
   public static toDomain(raw: any): FruitStorage {
@@ -17,16 +19,16 @@ export default class FruitStorageMap {
       raw.name,
       raw.description,
       raw.limitOfFruitToBeStored,
-      raw.amountInStorage
+      raw.amountInStorage,
     );
   }
 
-  public static ToMongoDocument (fruit: FruitStorage): IFruitStorageDocument {
+  public static ToMongoDocument(fruit: FruitStorage): IFruitStorageDocument {
     return new FruitStorageModel({
       name: fruit.name,
       description: fruit.description,
       limitOfFruitToBeStored: fruit.limitOfFruitToBeStored,
       amountInStorage: fruit.amountInStorage,
     });
-  };
+  }
 }

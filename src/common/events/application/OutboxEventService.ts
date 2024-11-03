@@ -1,18 +1,21 @@
-import { OutboxEvent } from '../domain/OutboxEvent';
-import { OutboxEventStatus } from '../domain/OutboxEventStatus.enum';
-import outboxEventRepository from '../infrastructure/OutboxEventRepository';
-import domainEventEmitterService, { DomainEventEmitterService } from './DomainEventEmitterService';
+import { OutboxEvent } from "../domain/OutboxEvent";
+import { OutboxEventStatus } from "../domain/OutboxEventStatus.enum";
+import outboxEventRepository from "../infrastructure/OutboxEventRepository";
+import domainEventEmitterService, {
+  DomainEventEmitterService,
+} from "./DomainEventEmitterService";
 
 export class OutboxEventService {
-
-  constructor(private domainEventEmitterService: DomainEventEmitterService) { }
+  constructor(private domainEventEmitterService: DomainEventEmitterService) {}
 
   public async run() {
-    const pendingEvents = await outboxEventRepository.findByStatus(OutboxEventStatus.PENDING);
+    const pendingEvents = await outboxEventRepository.findByStatus(
+      OutboxEventStatus.PENDING,
+    );
 
     for (const event of pendingEvents) {
       try {
-        const eventProcessed = this.domainEventEmitterService.emit(event)
+        const eventProcessed = this.domainEventEmitterService.emit(event);
 
         if (eventProcessed) {
           event.setToSent();
@@ -21,7 +24,6 @@ export class OutboxEventService {
         }
 
         await outboxEventRepository.update(event);
-
       } catch (error) {
         console.error(`Failed to process outbox event: ${error}`);
       }

@@ -3,8 +3,8 @@ import fruitStorageService from "../../application/FruitStorageService";
 
 export const FruitStorageQuery = queryType({
   definition(t) {
-    t.field('findFruit', {
-      type: 'FruitStorage',
+    t.field("findFruit", {
+      type: "FruitStorage",
       args: {
         name: nonNull(stringArg()),
       },
@@ -13,8 +13,8 @@ export const FruitStorageQuery = queryType({
       },
     });
 
-    t.field('listFruitStorages', {
-      type: list('FruitStorage'),
+    t.field("listFruitStorages", {
+      type: list("FruitStorage"),
       resolve: async () => {
         return fruitStorageService.listFruitStorages();
       },

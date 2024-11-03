@@ -3,32 +3,40 @@ import fruitStorageService from "../../application/FruitStorageService";
 
 export const FruitStorageMutation = mutationType({
   definition(t) {
-    t.field('createFruitForFruitStorage', {
-      type: 'FruitStorage',
+    t.field("createFruitForFruitStorage", {
+      type: "FruitStorage",
       args: {
         name: nonNull(stringArg()),
         description: nonNull(stringArg()),
         limitOfFruitToBeStored: nonNull(intArg()),
       },
       resolve: async (_, { name, description, limitOfFruitToBeStored }) => {
-        return fruitStorageService.createFruitStorage(name, description, limitOfFruitToBeStored);
+        return fruitStorageService.createFruitStorage(
+          name,
+          description,
+          limitOfFruitToBeStored,
+        );
       },
     });
 
-    t.field('updateFruitForFruitStorage', {
-      type: 'FruitStorage',
+    t.field("updateFruitForFruitStorage", {
+      type: "FruitStorage",
       args: {
         name: nonNull(stringArg()),
         description: nonNull(stringArg()),
         limitOfFruitToBeStored: nonNull(intArg()),
       },
       resolve: async (_, { name, description, limitOfFruitToBeStored }) => {
-        return fruitStorageService.updateFruitStorage(name, description, limitOfFruitToBeStored);
+        return fruitStorageService.updateFruitStorage(
+          name,
+          description,
+          limitOfFruitToBeStored,
+        );
       },
     });
 
-    t.field('deleteFruitFromFruitStorage', {
-      type: 'Boolean',
+    t.field("deleteFruitFromFruitStorage", {
+      type: "Boolean",
       args: {
         name: nonNull(stringArg()),
         forceDelete: nonNull(booleanArg()),
@@ -39,8 +47,8 @@ export const FruitStorageMutation = mutationType({
       },
     });
 
-    t.field('storeFruitToFruitStorage', {
-      type: 'FruitStorage',
+    t.field("storeFruitToFruitStorage", {
+      type: "FruitStorage",
       args: {
         name: nonNull(stringArg()),
         amount: nonNull(intArg()),
@@ -50,8 +58,8 @@ export const FruitStorageMutation = mutationType({
       },
     });
 
-    t.field('removeFruitFromFruitStorage', {
-      type: 'FruitStorage',
+    t.field("removeFruitFromFruitStorage", {
+      type: "FruitStorage",
       args: {
         name: nonNull(stringArg()),
         amount: nonNull(intArg()),
