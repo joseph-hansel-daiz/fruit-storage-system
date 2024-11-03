@@ -37,8 +37,6 @@ export class MongoFruitRepository implements IFruitStorageRepository {
   }
 
   public async delete(name: string): Promise<void> {
-    const fruit = await this.findByName(name);
-
     try {
       await FruitStorageModel.deleteOne({ name });
     } catch {
