@@ -34,8 +34,8 @@ export class FruitStorageService {
             throw new Error(FRUIT_STORAGE_ERRORS.CANNOT_DELETE_WITH_EXISTING_FRUIT);
         }
 
-        await this.outboxEventService.createEvent(FRUIT_STORAGE_EVENTS.DELETE, FruitStorageMap.toDTO(existingFruit))
         await this.fruitRepository.delete(name);
+        await this.outboxEventService.createEvent(FRUIT_STORAGE_EVENTS.DELETE, FruitStorageMap.toDTO(existingFruit))
     }
 
     public async storeFruit(name: string, amount: number): Promise<FruitStorage> {
