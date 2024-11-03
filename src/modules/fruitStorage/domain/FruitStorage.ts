@@ -8,7 +8,7 @@ export class FruitStorage {
     private _limitOfFruitToBeStored: number;
     private _amountInStorage: number;
 
-    constructor(name: FruitName, description: FruitDescription, limitOfFruitToBeStored: number, amountInStorage: number) {
+    private constructor(name: FruitName, description: FruitDescription, limitOfFruitToBeStored: number, amountInStorage: number) {
         this._name = name;
         this._description = description;
         this._limitOfFruitToBeStored = limitOfFruitToBeStored;
