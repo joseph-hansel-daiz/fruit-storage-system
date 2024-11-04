@@ -1,8 +1,8 @@
 import outboxEventService from "../../../common/events/application/OutboxEventService";
 import { executeScript } from "../../../common/tests/testConfig";
 import fruitStorageService from "../application/FruitStorageService";
-import { FRUIT_STORAGE_ERRORS } from "../domain/errors";
-import { FRUIT_STORAGE_EVENTS } from "../domain/events";
+import { FRUIT_STORAGE_ERRORS } from "../domain/constants/errors";
+import { FRUIT_STORAGE_EVENTS } from "../domain/constants/events";
 
 afterEach(async () => {
   await fruitStorageService.deleteAllFruitsStorages();

@@ -1,4 +1,4 @@
-import { FRUIT_STORAGE_ERRORS } from "./errors";
+import { FRUIT_STORAGE_ERRORS } from "./constants/errors";
 import { FruitDescription } from "./FruitDescription";
 import { FruitName } from "./FruitName";
 
