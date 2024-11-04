@@ -2,8 +2,8 @@ import outboxEventService, {
   OutboxEventService,
 } from "../../../common/events/application/OutboxEventService";
 import { IFruitStorageRepository } from "../adapter/IFruitStorageRepository";
-import { FRUIT_STORAGE_ERRORS } from "../domain/constants/errors";
-import { FRUIT_STORAGE_EVENTS } from "../domain/constants/events";
+import { FRUIT_STORAGE_ERRORS } from "../domain/constants/errors.constant";
+import { FRUIT_STORAGE_EVENTS } from "../domain/constants/events.constant";
 import { FruitStorage } from "../domain/entities/FruitStorage";
 import FruitStorageMap from "../infrastructure/FruitMapper";
 import fruitStorageRepository from "../infrastructure/FruitStorageRepository";

@@ -1,4 +1,4 @@
-import { FRUIT_STORAGE_ERRORS } from "../constants/errors";
+import { FRUIT_STORAGE_ERRORS } from "../constants/errors.constant";
 
 export class FruitName {
   private readonly _value: string;
