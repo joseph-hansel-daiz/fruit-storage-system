@@ -54,7 +54,7 @@ export class OutboxEvent {
   }
 
   public setToFailed(): void {
-    this._status = OutboxEventStatus.SENT;
+    this._status = OutboxEventStatus.FAILED;
     this._updatedAt = new Date();
   }
 
