@@ -1,4 +1,4 @@
-import { FruitStorage } from "../domain/FruitStorage";
+import { FruitStorage } from "../domain/entities/FruitStorage";
 import { FruitStorageDTO } from "../dtos/FruitStorageDTO";
 import FruitStorageModel, {
   IFruitStorageDocument,

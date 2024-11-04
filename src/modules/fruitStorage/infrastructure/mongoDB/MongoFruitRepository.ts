@@ -1,6 +1,6 @@
 import { IFruitStorageRepository } from "../../adapter/IFruitStorageRepository";
 import { FRUIT_STORAGE_ERRORS } from "../../domain/constants/errors";
-import { FruitStorage } from "../../domain/FruitStorage";
+import { FruitStorage } from "../../domain/entities/FruitStorage";
 import FruitStorageMap from "../FruitMapper";
 import FruitStorageModel from "./FruitStorageModel";
 

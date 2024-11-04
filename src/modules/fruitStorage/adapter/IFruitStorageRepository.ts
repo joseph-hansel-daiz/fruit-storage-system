@@ -1,4 +1,4 @@
-import { FruitStorage } from "../domain/FruitStorage";
+import { FruitStorage } from "../domain/entities/FruitStorage";
 
 export interface IFruitStorageRepository {
   findByName(name: string): Promise<FruitStorage>;

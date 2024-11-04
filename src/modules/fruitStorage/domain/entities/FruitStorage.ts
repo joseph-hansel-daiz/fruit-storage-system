@@ -1,6 +1,6 @@
-import { FRUIT_STORAGE_ERRORS } from "./constants/errors";
-import { FruitDescription } from "./FruitDescription";
-import { FruitName } from "./FruitName";
+import { FRUIT_STORAGE_ERRORS } from "../constants/errors";
+import { FruitDescription } from "../valueObjects/FruitDescription";
+import { FruitName } from "../valueObjects/FruitName";
 
 export class FruitStorage {
   private _name: FruitName;
