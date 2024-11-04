@@ -1,9 +1,12 @@
-import fruitStorageService from "../application/FruitStorageService";
+import outboxEventService from "../../../common/events/application/OutboxEventService";
 import { executeScript } from "../../../common/tests/testConfig";
+import fruitStorageService from "../application/FruitStorageService";
 import { FRUIT_STORAGE_ERRORS } from "../domain/errors";
+import { FRUIT_STORAGE_EVENTS } from "../domain/events";
 
 afterEach(async () => {
   await fruitStorageService.deleteAllFruitsStorages();
+  await outboxEventService.deleteAllEvents();
 });
 
 describe("createFruitForFruitStorage", () => {
@@ -16,6 +19,9 @@ describe("createFruitForFruitStorage", () => {
                 }
             }
         `);
+
+    const existingEvents = await outboxEventService.findAllEvents();
+    expect(existingEvents[existingEvents.length - 1].type).toBe(FRUIT_STORAGE_EVENTS.CREATE);
 
     expect(result.data?.createFruitForFruitStorage?.name).toBe("lemon");
     expect(result.data?.createFruitForFruitStorage?.description).toBe(
@@ -75,7 +81,7 @@ describe("updateFruitForFruitStorage", () => {
     );
   });
 
-  it("should update the description of an existing fruit", async () => {
+  it("should update the description of an existing fruit and produce a domain event", async () => {
     const result = await executeScript(`
       mutation {
         updateFruitForFruitStorage(name: "lemon", description: "updated lemon description", limitOfFruitToBeStored: 10) {
@@ -84,6 +90,9 @@ describe("updateFruitForFruitStorage", () => {
         }
       }
     `);
+
+    const existingEvents = await outboxEventService.findAllEvents();
+    expect(existingEvents[existingEvents.length - 1].type).toBe(FRUIT_STORAGE_EVENTS.UPDATE);
 
     expect(result.data?.updateFruitForFruitStorage.description).toBe(
       "updated lemon description",
@@ -139,6 +148,9 @@ describe("deleteFruitFromFruitStorage", () => {
         deleteFruitFromFruitStorage(name: "lemon", forceDelete: true)
       }
     `);
+
+    const existingEvents = await outboxEventService.findAllEvents();
+    expect(existingEvents[existingEvents.length - 1].type).toBe(FRUIT_STORAGE_EVENTS.DELETE);
 
     expect(result.data?.deleteFruitFromFruitStorage).toBe(true);
   });

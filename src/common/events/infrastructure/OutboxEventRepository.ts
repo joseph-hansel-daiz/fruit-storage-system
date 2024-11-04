@@ -12,21 +12,35 @@ export class OutboxEventRepository implements IOutboxEventRepository {
     }).lean();
     return OutboxMap.toDomain(document);
   }
+
   public async findByStatus(status: OutboxEventStatus): Promise<OutboxEvent[]> {
     const documents = await OutboxEventModel.find({ status: status }).lean();
     return documents.map((document) => {
       return OutboxMap.toDomain(document);
     });
   }
+
+  public async findAll(): Promise<OutboxEvent[]> {
+    const documents = await OutboxEventModel.find();
+    return documents.map((document) => {
+      return OutboxMap.toDomain(document);
+    });
+  }
+
   public async save(outboxEvent: OutboxEvent): Promise<void> {
     const document = OutboxMap.ToMongoDocument(outboxEvent);
     await document.save();
   }
+
   public async update(outboxEvent: OutboxEvent): Promise<void> {
     await OutboxEventModel.findByIdAndUpdate(
       new ObjectId(outboxEvent.id),
       OutboxMap.toDTO(outboxEvent),
     );
+  }
+
+  public async deleteAll(): Promise<void> {
+    await OutboxEventModel.deleteMany({});
   }
 }
 

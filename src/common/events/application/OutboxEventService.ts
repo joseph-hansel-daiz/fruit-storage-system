@@ -14,26 +14,32 @@ export class OutboxEventService {
     );
 
     for (const event of pendingEvents) {
-      try {
-        const eventProcessed = this.domainEventEmitterService.emit(event);
+      const eventProcessed = this.domainEventEmitterService.emit(event);
 
-        if (eventProcessed) {
-          event.setToSent();
-        } else {
-          event.setToFailed();
-        }
-
-        await outboxEventRepository.update(event);
-      } catch (error) {
-        console.error(`Failed to process outbox event: ${error}`);
+      if (eventProcessed) {
+        event.setToSent();
+      } else {
+        event.setToFailed();
       }
+
+      await outboxEventRepository.update(event);
     }
   }
 
-  public async createEvent(type: string, payload: any) {
+  public async createEvent(type: string, payload: any): Promise<void> {
     const event = OutboxEvent.create(type, payload);
-    outboxEventRepository.save(event);
+    await outboxEventRepository.save(event);
   }
+
+  public async deleteAllEvents(): Promise<void> {
+    await outboxEventRepository.deleteAll();
+  }
+
+  public async findAllEvents(): Promise<OutboxEvent[]> {
+    return outboxEventRepository.findAll();
+  }
+
+
 }
 
 const outboxEventService = new OutboxEventService(domainEventEmitterService);
