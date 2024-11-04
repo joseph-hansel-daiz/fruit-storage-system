@@ -25,17 +25,15 @@ export class MongoFruitRepository implements IFruitStorageRepository {
     }
   }
 
-  public async update(fruit: FruitStorage): Promise<FruitStorage> {
-    const document = await FruitStorageModel.findOneAndUpdate(
-      { name: fruit.name },
-      FruitStorageMap.toDTO(fruit),
-    ).lean();
-
-    if (!document) {
+  public async update(fruit: FruitStorage): Promise<void> {
+    try {
+      await FruitStorageModel.findOneAndUpdate(
+        { name: fruit.name },
+        FruitStorageMap.toDTO(fruit),
+      ).lean();
+    } catch (error) {
       throw new Error(FRUIT_STORAGE_ERRORS.CANNOT_UPDATE);
     }
-
-    return FruitStorageMap.toDomain(document);
   }
 
   public async delete(name: string): Promise<void> {
