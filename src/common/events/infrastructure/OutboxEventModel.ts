@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { OutboxEventStatus } from "../domain/OutboxEventStatus.enum";
+import { OutboxEventStatus } from "../domain/enums/OutboxEventStatus.enum";
 
 export interface IOutboxEventDocument extends Document {
   type: string;

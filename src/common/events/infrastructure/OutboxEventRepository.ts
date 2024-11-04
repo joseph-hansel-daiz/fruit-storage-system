@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { IOutboxEventRepository } from "../adapter/IOutboxEventRepository";
 import { OutboxEvent } from "../domain/OutboxEvent";
-import { OutboxEventStatus } from "../domain/OutboxEventStatus.enum";
+import { OutboxEventStatus } from "../domain/enums/OutboxEventStatus.enum";
 import { OutboxEventModel } from "./OutboxEventModel";
 import OutboxMap from "./OutboxMapper";
 

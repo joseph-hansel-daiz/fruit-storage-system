@@ -1,5 +1,5 @@
 import { OutboxEvent } from "../domain/OutboxEvent";
-import { OutboxEventStatus } from "../domain/OutboxEventStatus.enum";
+import { OutboxEventStatus } from "../domain/enums/OutboxEventStatus.enum";
 import outboxEventRepository from "../infrastructure/OutboxEventRepository";
 import domainEventEmitterService, {
   DomainEventEmitterService,

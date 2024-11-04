@@ -1,4 +1,4 @@
-import { OutboxEventStatus } from "./OutboxEventStatus.enum";
+import { OutboxEventStatus } from "./enums/OutboxEventStatus.enum";
 
 export class OutboxEvent {
   private _id: string;
