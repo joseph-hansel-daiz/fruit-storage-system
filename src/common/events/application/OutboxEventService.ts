@@ -38,8 +38,6 @@ export class OutboxEventService {
   public async findAllEvents(): Promise<OutboxEvent[]> {
     return outboxEventRepository.findAll();
   }
-
-
 }
 
 const outboxEventService = new OutboxEventService(domainEventEmitterService);

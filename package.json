@@ -3,7 +3,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "lint": "prettier --write ."
   },
   "dependencies": {
     "apollo-server": "^3.13.0",

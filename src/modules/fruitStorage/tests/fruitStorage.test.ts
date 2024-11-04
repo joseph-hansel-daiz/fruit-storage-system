@@ -21,7 +21,9 @@ describe("createFruitForFruitStorage", () => {
         `);
 
     const existingEvents = await outboxEventService.findAllEvents();
-    expect(existingEvents[existingEvents.length - 1].type).toBe(FRUIT_STORAGE_EVENTS.CREATE);
+    expect(existingEvents[existingEvents.length - 1].type).toBe(
+      FRUIT_STORAGE_EVENTS.CREATE,
+    );
 
     expect(result.data?.createFruitForFruitStorage?.name).toBe("lemon");
     expect(result.data?.createFruitForFruitStorage?.description).toBe(
@@ -92,7 +94,9 @@ describe("updateFruitForFruitStorage", () => {
     `);
 
     const existingEvents = await outboxEventService.findAllEvents();
-    expect(existingEvents[existingEvents.length - 1].type).toBe(FRUIT_STORAGE_EVENTS.UPDATE);
+    expect(existingEvents[existingEvents.length - 1].type).toBe(
+      FRUIT_STORAGE_EVENTS.UPDATE,
+    );
 
     expect(result.data?.updateFruitForFruitStorage.description).toBe(
       "updated lemon description",
@@ -150,7 +154,9 @@ describe("deleteFruitFromFruitStorage", () => {
     `);
 
     const existingEvents = await outboxEventService.findAllEvents();
-    expect(existingEvents[existingEvents.length - 1].type).toBe(FRUIT_STORAGE_EVENTS.DELETE);
+    expect(existingEvents[existingEvents.length - 1].type).toBe(
+      FRUIT_STORAGE_EVENTS.DELETE,
+    );
 
     expect(result.data?.deleteFruitFromFruitStorage).toBe(true);
   });
