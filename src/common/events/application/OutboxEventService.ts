@@ -1,44 +1,44 @@
 import { OutboxEvent } from "../domain/OutboxEvent";
 import { OutboxEventStatus } from "../domain/enums/OutboxEventStatus.enum";
-import outboxEventRepository from "../infrastructure/OutboxEventRepository";
+import outboxEventRepository, { OutboxEventRepository } from "../infrastructure/OutboxEventRepository";
 import domainEventEmitterService, {
   DomainEventEmitterService,
 } from "./DomainEventEmitterService";
 
 export class OutboxEventService {
-  constructor(private domainEventEmitterService: DomainEventEmitterService) {}
+  constructor(private domainEventEmitterService: DomainEventEmitterService, private outboxEventRepository: OutboxEventRepository) {}
 
   public async run() {
-    const pendingEvents = await outboxEventRepository.findByStatus(
+    const pendingEvents = await this.outboxEventRepository.findByStatus(
       OutboxEventStatus.PENDING,
     );
 
     for (const event of pendingEvents) {
-      const eventProcessed = this.domainEventEmitterService.emit(event);
-
-      if (eventProcessed) {
+      
+      try {
+        this.domainEventEmitterService.emit(event)
         event.setToSent();
-      } else {
+      } catch (error) {
         event.setToFailed();
       }
 
-      await outboxEventRepository.update(event);
+      await this.outboxEventRepository.update(event);
     }
   }
 
   public async createEvent(type: string, payload: any): Promise<void> {
     const event = OutboxEvent.create(type, payload);
-    await outboxEventRepository.save(event);
+    await this.outboxEventRepository.save(event);
   }
 
   public async deleteAllEvents(): Promise<void> {
-    await outboxEventRepository.deleteAll();
+    await this.outboxEventRepository.deleteAll();
   }
 
   public async findAllEvents(): Promise<OutboxEvent[]> {
-    return outboxEventRepository.findAll();
+    return this.outboxEventRepository.findAll();
   }
 }
 
-const outboxEventService = new OutboxEventService(domainEventEmitterService);
+const outboxEventService = new OutboxEventService(domainEventEmitterService, outboxEventRepository);
 export default outboxEventService;

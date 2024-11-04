@@ -8,8 +8,8 @@ export class DomainEventEmitterService {
     this.emitter = new EventEmitter();
   }
 
-  public emit(outboxEvent: OutboxEvent): boolean {
-    return this.emitter.emit(outboxEvent.type, outboxEvent.payload);
+  public emit(outboxEvent: OutboxEvent): void {
+    this.emitter.emit(outboxEvent.type, outboxEvent.payload);
   }
 
   public on(eventType: string, listener: (payload: any) => void): void {
