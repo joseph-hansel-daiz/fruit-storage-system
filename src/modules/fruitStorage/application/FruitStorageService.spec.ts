@@ -26,7 +26,7 @@ describe("FruitStorageService", () => {
     await disconnectFromDatabase();
   });
 
-  afterEach(async () => {
+  beforeEach(async () => {
     await fruitStorageRepository.deleteAll();
     await outboxEventService.deleteAllEvents();
   });
