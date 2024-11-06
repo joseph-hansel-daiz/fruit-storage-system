@@ -1,3 +1,4 @@
+import { AppError } from "../../../../common/core/error/AppError";
 import { FRUIT_STORAGE_ERRORS } from "../constants/errors.constant";
 import { FruitDescription } from "../value-objects/FruitDescription";
 import { FruitName } from "../value-objects/FruitName";
@@ -38,20 +39,24 @@ export class FruitStorage {
 
   public storeFruit(amount: number): void {
     if (amount <= 0) {
-      throw new Error(FRUIT_STORAGE_ERRORS.AMOUNT_SHOULD_POSITIVE);
+      throw AppError.KnownError.create(
+        FRUIT_STORAGE_ERRORS.AMOUNT_SHOULD_POSITIVE,
+      );
     }
     if (this._amountInStorage + amount > this._limitOfFruitToBeStored) {
-      throw new Error(FRUIT_STORAGE_ERRORS.CANNOT_STORE);
+      throw AppError.KnownError.create(FRUIT_STORAGE_ERRORS.CANNOT_STORE);
     }
     this._amountInStorage += amount;
   }
 
   public removeFruit(amount: number): void {
     if (amount <= 0) {
-      throw new Error(FRUIT_STORAGE_ERRORS.AMOUNT_SHOULD_POSITIVE);
+      throw AppError.KnownError.create(
+        FRUIT_STORAGE_ERRORS.AMOUNT_SHOULD_POSITIVE,
+      );
     }
     if (this._amountInStorage < amount) {
-      throw new Error(FRUIT_STORAGE_ERRORS.CANNOT_REMOVE);
+      throw AppError.KnownError.create(FRUIT_STORAGE_ERRORS.CANNOT_REMOVE);
     }
     this._amountInStorage -= amount;
   }

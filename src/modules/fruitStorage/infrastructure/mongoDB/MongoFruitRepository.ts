@@ -1,3 +1,4 @@
+import { AppError } from "../../../../common/core/error/AppError";
 import { IFruitStorageRepository } from "../../adapter/IFruitStorageRepository";
 import { FRUIT_STORAGE_ERRORS } from "../../domain/constants/errors.constant";
 import { FruitStorage } from "../../domain/entities/FruitStorage";
@@ -5,11 +6,16 @@ import FruitStorageMap from "../FruitMapper";
 import FruitStorageModel from "./FruitStorageModel";
 
 export class MongoFruitRepository implements IFruitStorageRepository {
+  public async exists(name: string): Promise<boolean> {
+    const document = await FruitStorageModel.findOne({ name }).lean();
+    return !!document;
+  }
+
   public async findByName(name: string): Promise<FruitStorage> {
     const document = await FruitStorageModel.findOne({ name }).lean();
 
     if (!document) {
-      throw new Error(FRUIT_STORAGE_ERRORS.CANNOT_READ);
+      throw AppError.KnownError.create(FRUIT_STORAGE_ERRORS.CANNOT_READ);
     }
 
     return FruitStorageMap.toDomain(document);
@@ -17,31 +23,18 @@ export class MongoFruitRepository implements IFruitStorageRepository {
 
   public async save(fruit: FruitStorage): Promise<void> {
     const document = FruitStorageMap.ToMongoDocument(fruit);
-
-    try {
-      await document.save();
-    } catch {
-      throw new Error(FRUIT_STORAGE_ERRORS.CANNOT_CREATE);
-    }
+    await document.save();
   }
 
   public async update(fruit: FruitStorage): Promise<void> {
-    try {
-      await FruitStorageModel.findOneAndUpdate(
-        { name: fruit.name },
-        FruitStorageMap.toDTO(fruit),
-      ).lean();
-    } catch (error) {
-      throw new Error(FRUIT_STORAGE_ERRORS.CANNOT_UPDATE);
-    }
+    await FruitStorageModel.findOneAndUpdate(
+      { name: fruit.name },
+      FruitStorageMap.toDTO(fruit),
+    );
   }
 
   public async delete(name: string): Promise<void> {
-    try {
-      await FruitStorageModel.deleteOne({ name });
-    } catch {
-      throw new Error(FRUIT_STORAGE_ERRORS.CANNOT_DELETE);
-    }
+    await FruitStorageModel.deleteOne({ name });
   }
 
   public async getAll(): Promise<FruitStorage[]> {
@@ -50,10 +43,6 @@ export class MongoFruitRepository implements IFruitStorageRepository {
   }
 
   public async deleteAll(): Promise<void> {
-    try {
-      await FruitStorageModel.deleteMany({});
-    } catch {
-      throw new Error(FRUIT_STORAGE_ERRORS.CANNOT_DELETE_ALL);
-    }
+    await FruitStorageModel.deleteMany({});
   }
 }

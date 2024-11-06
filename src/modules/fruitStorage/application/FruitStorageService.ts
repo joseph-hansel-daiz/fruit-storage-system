@@ -1,3 +1,4 @@
+import { AppError } from "../../../common/core/error/AppError";
 import outboxEventService, {
   OutboxEventService,
 } from "../../../common/events/application/OutboxEventService";
@@ -19,27 +20,28 @@ export class FruitStorageService {
     description: string,
     limitOfFruitToBeStored: number,
   ): Promise<FruitStorage> {
-    let existingFruitStorage: FruitStorage | null = null;
-
     try {
-      existingFruitStorage = await this.fruitRepository.findByName(name);
-    } catch (error) {}
+      const isExistingFruitStorage = await this.fruitRepository.exists(name);
+      if (isExistingFruitStorage) {
+        throw AppError.KnownError.create(
+          FRUIT_STORAGE_ERRORS.CANNOT_CREATE_EXISTING_FRUIT,
+        );
+      }
 
-    if (existingFruitStorage) {
-      throw new Error(FRUIT_STORAGE_ERRORS.CANNOT_CREATE_EXISTING_FRUIT);
+      const fruit = FruitStorage.create(
+        name,
+        description,
+        limitOfFruitToBeStored,
+      );
+      await this.fruitRepository.save(fruit);
+      await this.outboxEventService.createEvent(
+        FRUIT_STORAGE_EVENTS.CREATE,
+        FruitStorageMap.toDTO(fruit),
+      );
+      return fruit;
+    } catch (error) {
+      throw AppError.identifyError(error);
     }
-
-    const fruit = FruitStorage.create(
-      name,
-      description,
-      limitOfFruitToBeStored,
-    );
-    await this.fruitRepository.save(fruit);
-    await this.outboxEventService.createEvent(
-      FRUIT_STORAGE_EVENTS.CREATE,
-      FruitStorageMap.toDTO(fruit),
-    );
-    return fruit;
   }
 
   public async updateFruitStorage(
@@ -47,65 +49,97 @@ export class FruitStorageService {
     description: string,
     limitOfFruitToBeStored: number,
   ): Promise<FruitStorage> {
-    const existingFruit = await this.fruitRepository.findByName(name);
+    try {
+      const existingFruit = await this.fruitRepository.findByName(name);
 
-    existingFruit.updateDescription(description);
-    existingFruit.updateLimitOfFruitToBeStored(limitOfFruitToBeStored);
+      existingFruit.updateDescription(description);
+      existingFruit.updateLimitOfFruitToBeStored(limitOfFruitToBeStored);
 
-    await this.fruitRepository.update(existingFruit);
-    await this.outboxEventService.createEvent(
-      FRUIT_STORAGE_EVENTS.UPDATE,
-      FruitStorageMap.toDTO(existingFruit),
-    );
-    return existingFruit;
+      await this.fruitRepository.update(existingFruit);
+      await this.outboxEventService.createEvent(
+        FRUIT_STORAGE_EVENTS.UPDATE,
+        FruitStorageMap.toDTO(existingFruit),
+      );
+      return existingFruit;
+    } catch (error) {
+      throw AppError.identifyError(error);
+    }
   }
 
   public async deleteFruitStorage(
     name: string,
     forceDelete: boolean = false,
   ): Promise<void> {
-    const existingFruit = await this.fruitRepository.findByName(name);
+    try {
+      const existingFruit = await this.fruitRepository.findByName(name);
 
-    if (!forceDelete && existingFruit.amountInStorage > 0) {
-      throw new Error(FRUIT_STORAGE_ERRORS.CANNOT_DELETE_WITH_EXISTING_FRUIT);
+      if (!forceDelete && existingFruit.amountInStorage > 0) {
+        throw AppError.KnownError.create(
+          FRUIT_STORAGE_ERRORS.CANNOT_DELETE_WITH_EXISTING_FRUIT,
+        );
+      }
+
+      await this.fruitRepository.delete(name);
+      await this.outboxEventService.createEvent(
+        FRUIT_STORAGE_EVENTS.DELETE,
+        FruitStorageMap.toDTO(existingFruit),
+      );
+    } catch (error) {
+      throw AppError.identifyError(error);
     }
-
-    await this.fruitRepository.delete(name);
-    await this.outboxEventService.createEvent(
-      FRUIT_STORAGE_EVENTS.DELETE,
-      FruitStorageMap.toDTO(existingFruit),
-    );
   }
 
   public async storeFruit(name: string, amount: number): Promise<FruitStorage> {
-    const fruit = await this.fruitRepository.findByName(name);
+    try {
+      const fruit = await this.fruitRepository.findByName(name);
 
-    fruit.storeFruit(amount);
-    await this.fruitRepository.update(fruit);
-    return fruit;
+      fruit.storeFruit(amount);
+      await this.fruitRepository.update(fruit);
+
+      return fruit;
+    } catch (error) {
+      throw AppError.identifyError(error);
+    }
   }
 
   public async removeFruit(
     name: string,
     amount: number,
   ): Promise<FruitStorage> {
-    const fruit = await this.fruitRepository.findByName(name);
+    try {
+      const fruit = await this.fruitRepository.findByName(name);
 
-    fruit.removeFruit(amount);
-    await this.fruitRepository.update(fruit);
-    return fruit;
+      fruit.removeFruit(amount);
+      await this.fruitRepository.update(fruit);
+
+      return fruit;
+    } catch (error) {
+      throw AppError.identifyError(error);
+    }
   }
 
   public async findFruit(name: string): Promise<FruitStorage> {
-    return this.fruitRepository.findByName(name);
+    try {
+      return this.fruitRepository.findByName(name);
+    } catch (error) {
+      throw AppError.identifyError(error);
+    }
   }
 
   public async listFruitStorages(): Promise<FruitStorage[]> {
-    return this.fruitRepository.getAll();
+    try {
+      return this.fruitRepository.getAll();
+    } catch (error) {
+      throw AppError.identifyError(error);
+    }
   }
 
   public async deleteAllFruitsStorages(): Promise<void> {
-    await this.fruitRepository.deleteAll();
+    try {
+      await this.fruitRepository.deleteAll();
+    } catch (error) {
+      throw AppError.identifyError(error);
+    }
   }
 }
 

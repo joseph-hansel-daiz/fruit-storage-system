@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import {
-    connectToDatabase,
-    disconnectFromDatabase,
+  connectToDatabase,
+  disconnectFromDatabase,
 } from "../../../config/database";
 import { FRUIT_STORAGE_EVENTS } from "../../../modules/fruitStorage/domain/constants/events.constant";
 import outboxEventRepository from "../infrastructure/OutboxEventRepository";
@@ -39,12 +39,12 @@ describe("OutboxEventService", () => {
 
   describe("run", () => {
     it("should process pending events and set them to SENT if emitted successfully", async () => {
-        await outboxEventService.createEvent(eventType, eventPayload);
-        await outboxEventService.run();
+      await outboxEventService.createEvent(eventType, eventPayload);
+      await outboxEventService.run();
 
-        const results = await outboxEventRepository.findAll()
+      const results = await outboxEventRepository.findAll();
 
-        expect(results[0].status).toBe(OutboxEventStatus.SENT)
+      expect(results[0].status).toBe(OutboxEventStatus.SENT);
     });
   });
 
@@ -61,27 +61,28 @@ describe("OutboxEventService", () => {
 
   describe("deleteAllEvents", () => {
     it("should delete all events", async () => {
-        await outboxEventService.createEvent(eventType, eventPayload);
-        const previousLength = (await outboxEventRepository.findAll()).length;
+      await outboxEventService.createEvent(eventType, eventPayload);
+      const previousLength = (await outboxEventRepository.findAll()).length;
 
-        await outboxEventService.deleteAllEvents();
+      await outboxEventService.deleteAllEvents();
 
-        const afterDeletionLength = (await outboxEventRepository.findAll()).length;
-        expect(afterDeletionLength).not.toBe(previousLength);
+      const afterDeletionLength = (await outboxEventRepository.findAll())
+        .length;
+      expect(afterDeletionLength).not.toBe(previousLength);
     });
   });
 
   describe("findAllEvents", () => {
     it("should return all events", async () => {
-        const previousLength = (await outboxEventRepository.findAll()).length;
-        await outboxEventService.createEvent(eventType, eventPayload);
-        await outboxEventService.createEvent(eventType, eventPayload);
-        await outboxEventService.createEvent(eventType, eventPayload);
+      const previousLength = (await outboxEventRepository.findAll()).length;
+      await outboxEventService.createEvent(eventType, eventPayload);
+      await outboxEventService.createEvent(eventType, eventPayload);
+      await outboxEventService.createEvent(eventType, eventPayload);
 
-        const results = await outboxEventRepository.findAll()
+      const results = await outboxEventRepository.findAll();
 
-        expect(results.length).not.toBe(previousLength);
-        expect(results.length).toBe(3);
+      expect(results.length).not.toBe(previousLength);
+      expect(results.length).toBe(3);
     });
   });
 });
