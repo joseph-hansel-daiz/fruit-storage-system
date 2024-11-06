@@ -2,7 +2,7 @@ import { APP_ERRORS } from "./errors.constant";
 
 export namespace AppError {
   export class KnownError extends Error {
-    private constructor(message: string) {
+    public constructor(message: string) {
       super(message);
     }
 
@@ -12,7 +12,7 @@ export namespace AppError {
   }
 
   export class UnexpectedError extends Error {
-    private constructor() {
+    public constructor() {
       super(APP_ERRORS.UNEXPECTED);
     }
 
