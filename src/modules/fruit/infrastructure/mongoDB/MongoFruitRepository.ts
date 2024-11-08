@@ -1,6 +1,6 @@
 import { AppError } from "../../../../common/core/error/AppError";
 import { IFruitRepository } from "../../adapter/IFruitRepository";
-import { FRUIT_STORAGE_ERRORS } from "../../domain/constants/errors.constant";
+import { FRUIT_ERRORS } from "../../domain/constants/errors.constant";
 import { Fruit } from "../../domain/entities/Fruit";
 import FruitMap from "../FruitMapper";
 import FruitModel from "./FruitModel";
@@ -14,7 +14,7 @@ export class MongoFruitRepository implements IFruitRepository {
     const document = await FruitModel.findOne({ name }).lean();
 
     if (!document) {
-      throw AppError.KnownError.create(FRUIT_STORAGE_ERRORS.CANNOT_READ);
+      throw AppError.KnownError.create(FRUIT_ERRORS.CANNOT_READ);
     }
 
     return FruitMap.toDomain(document);

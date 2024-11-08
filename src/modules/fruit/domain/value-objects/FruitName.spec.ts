@@ -1,4 +1,4 @@
-import { FRUIT_STORAGE_ERRORS } from "../constants/errors.constant";
+import { FRUIT_ERRORS } from "../constants/errors.constant";
 import { FruitName } from "./FruitName";
 
 describe("FruitName", () => {
@@ -12,14 +12,14 @@ describe("FruitName", () => {
     it("should throw an error if the name is an empty string", () => {
       const emptyName = "";
       expect(() => FruitName.create(emptyName)).toThrow(
-        FRUIT_STORAGE_ERRORS.NAME_CANNOT_BE_EMPTY,
+        FRUIT_ERRORS.NAME_CANNOT_BE_EMPTY,
       );
     });
 
     it("should throw an error if the name is only whitespace", () => {
       const whitespaceName = "   ";
       expect(() => FruitName.create(whitespaceName)).toThrow(
-        FRUIT_STORAGE_ERRORS.NAME_CANNOT_BE_EMPTY,
+        FRUIT_ERRORS.NAME_CANNOT_BE_EMPTY,
       );
     });
   });

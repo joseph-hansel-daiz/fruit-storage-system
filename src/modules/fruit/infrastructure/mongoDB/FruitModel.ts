@@ -12,7 +12,9 @@ const fruitSchema = new Schema({
   limitOfFruitToBeStored: { type: Number, required: true },
 });
 
-const FruitModel: Model<IFruitDocument> =
-  model<IFruitDocument>("Fruit", fruitSchema);
+const FruitModel: Model<IFruitDocument> = model<IFruitDocument>(
+  "Fruit",
+  fruitSchema,
+);
 
 export default FruitModel;

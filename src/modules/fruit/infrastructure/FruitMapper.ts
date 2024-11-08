@@ -12,11 +12,7 @@ export default class FruitMap {
   }
 
   public static toDomain(raw: any): Fruit {
-    return Fruit.create(
-      raw.name,
-      raw.description,
-      raw.limitOfFruitToBeStored,
-    );
+    return Fruit.create(raw.name, raw.description, raw.limitOfFruitToBeStored);
   }
 
   public static ToMongoDocument(fruit: Fruit): IFruitDocument {

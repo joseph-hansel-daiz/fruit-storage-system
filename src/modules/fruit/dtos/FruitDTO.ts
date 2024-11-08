@@ -1,6 +1,5 @@
 export interface FruitDTO {
-    name: string;
-    description: string;
-    limitOfFruitToBeStored: number;
-  }
-  
+  name: string;
+  description: string;
+  limitOfFruitToBeStored: number;
+}

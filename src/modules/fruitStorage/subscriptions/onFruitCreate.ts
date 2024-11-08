@@ -9,13 +9,13 @@ export class OnFruitCreate implements IHandle {
   }
 
   public async doAction(payload: any): Promise<void> {
-    await fruitStorageService.createFruitStorage(payload.name, payload.limitOfFruitToBeStored);
+    await fruitStorageService.createFruitStorage(
+      payload.name,
+      payload.limitOfFruitToBeStored,
+    );
   }
 
   public setupSubscriptions() {
-    domainEventEmitterService.on(
-      FRUIT_EVENTS.CREATE,
-      this.doAction,
-    );
+    domainEventEmitterService.on(FRUIT_EVENTS.CREATE, this.doAction);
   }
 }

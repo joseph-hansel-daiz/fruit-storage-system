@@ -1,3 +1,3 @@
-import { onFruitDeletionFromStorage } from "./onFruitDeletionFromStorage";
+import { OnFruitDeletionFromStorage } from "./onFruitDeletionFromStorage";
 
-new onFruitDeletionFromStorage();
+new OnFruitDeletionFromStorage();

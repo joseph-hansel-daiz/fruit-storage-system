@@ -24,7 +24,7 @@ export class FruitStorageService {
         await this.fruitStorageRepository.exists(name);
       if (isExistingFruitStorage) {
         throw AppError.KnownError.create(
-          FRUIT_STORAGE_ERRORS.CANNOT_CREATE_EXISTING_FRUIT,
+          FRUIT_STORAGE_ERRORS.CANNOT_CREATE_EXISTING_FRUIT_STORAGE,
         );
       }
 

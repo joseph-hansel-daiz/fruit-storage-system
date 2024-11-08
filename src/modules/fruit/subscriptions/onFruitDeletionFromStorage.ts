@@ -3,7 +3,7 @@ import domainEventEmitterService from "../../../common/events/application/Domain
 import { FRUIT_STORAGE_EVENTS } from "../../fruitStorage/domain/constants/events.constant";
 import fruitService from "../application/FruitService";
 
-export class onFruitDeletionFromStorage implements IHandle {
+export class OnFruitDeletionFromStorage implements IHandle {
   constructor() {
     this.setupSubscriptions();
   }

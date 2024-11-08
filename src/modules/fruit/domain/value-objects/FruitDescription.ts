@@ -1,5 +1,5 @@
 import { AppError } from "../../../../common/core/error/AppError";
-import { FRUIT_STORAGE_ERRORS } from "../constants/errors.constant";
+import { FRUIT_ERRORS } from "../constants/errors.constant";
 
 export class FruitDescription {
   private readonly _value: string;
@@ -15,7 +15,7 @@ export class FruitDescription {
   public static create(description: string): FruitDescription {
     if (description.length > 30) {
       throw AppError.KnownError.create(
-        FRUIT_STORAGE_ERRORS.DESCRIPTION_CANNOT_EXCEED_LIMIT,
+        FRUIT_ERRORS.DESCRIPTION_CANNOT_EXCEED_LIMIT,
       );
     }
     return new FruitDescription(description);

@@ -3,7 +3,7 @@ import outboxEventService, {
   OutboxEventService,
 } from "../../../common/events/application/OutboxEventService";
 import { IFruitRepository } from "../adapter/IFruitRepository";
-import { FRUIT_STORAGE_ERRORS } from "../domain/constants/errors.constant";
+import { FRUIT_ERRORS } from "../domain/constants/errors.constant";
 import { FRUIT_EVENTS } from "../domain/constants/events.constant";
 import { Fruit } from "../domain/entities/Fruit";
 import FruitMap from "../infrastructure/FruitMapper";
@@ -24,7 +24,7 @@ export class FruitService {
       const isExistingFruit = await this.fruitRepository.exists(name);
       if (isExistingFruit) {
         throw AppError.KnownError.create(
-          FRUIT_STORAGE_ERRORS.CANNOT_CREATE_EXISTING_FRUIT,
+          FRUIT_ERRORS.CANNOT_CREATE_EXISTING_FRUIT,
         );
       }
 
@@ -92,7 +92,7 @@ export class FruitService {
     }
   }
 
-  public async deleteAllFruitsStorages(): Promise<void> {
+  public async deleteAllFruits(): Promise<void> {
     try {
       await this.fruitRepository.deleteAll();
     } catch (error) {

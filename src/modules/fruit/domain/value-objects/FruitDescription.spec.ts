@@ -1,4 +1,4 @@
-import { FRUIT_STORAGE_ERRORS } from "../constants/errors.constant";
+import { FRUIT_ERRORS } from "../constants/errors.constant";
 import { FruitDescription } from "./FruitDescription";
 
 describe("FruitDescription", () => {
@@ -13,7 +13,7 @@ describe("FruitDescription", () => {
       const longDescription =
         "This description is way too long and exceeds the 30 character limit.";
       expect(() => FruitDescription.create(longDescription)).toThrow(
-        FRUIT_STORAGE_ERRORS.DESCRIPTION_CANNOT_EXCEED_LIMIT,
+        FRUIT_ERRORS.DESCRIPTION_CANNOT_EXCEED_LIMIT,
       );
     });
   });
