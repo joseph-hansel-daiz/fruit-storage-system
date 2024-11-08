@@ -1,10 +1,10 @@
-import { FRUIT_STORAGE_EVENTS } from "../../../modules/fruitStorage/domain/constants/events.constant";
+import { FRUIT_EVENTS } from "../../../modules/fruit/domain/constants/events.constant";
 import { OutboxEvent } from "./OutboxEvent";
 import { OutboxEventStatus } from "./enums/OutboxEventStatus.enum";
 
 describe("OutboxEvent", () => {
   const eventId = "event-id";
-  const eventType = FRUIT_STORAGE_EVENTS.CREATE;
+  const eventType = FRUIT_EVENTS.CREATE;
   const eventPayload = {
     name: "Apple",
     description: "A description of an apple",

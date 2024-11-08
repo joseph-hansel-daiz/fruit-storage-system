@@ -1,5 +1,5 @@
-import { MongoFruitRepository } from "./mongoDB/MongoFruitRepository";
+import { MongoFruitStorageRepository } from "./mongoDB/MongoFruitStorageRepository";
 
-const fruitStorageRepository = new MongoFruitRepository();
+const fruitStorageRepository = new MongoFruitStorageRepository();
 
 export default fruitStorageRepository;

@@ -1,15 +1,16 @@
-import { list, nonNull, queryType, stringArg } from "nexus";
+import { extendType, list, nonNull, stringArg } from "nexus";
 import fruitStorageService from "../../application/FruitStorageService";
 
-export const FruitStorageQuery = queryType({
+export const FruitStorageQuery = extendType({
+  type: "Query",
   definition(t) {
-    t.field("findFruit", {
+    t.field("findFruitStorage", {
       type: "FruitStorage",
       args: {
         name: nonNull(stringArg()),
       },
       resolve: async (_, { name }) => {
-        return fruitStorageService.findFruit(name);
+        return fruitStorageService.findFruitStorage(name);
       },
     });
 

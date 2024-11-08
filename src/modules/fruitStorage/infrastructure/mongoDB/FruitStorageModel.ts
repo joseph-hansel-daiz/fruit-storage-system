@@ -7,14 +7,13 @@ export interface IFruitStorageDocument extends Document {
   amountInStorage: number;
 }
 
-const fruitSchema = new Schema({
+const fruitStorageSchema = new Schema({
   name: { type: String, required: true, unique: true },
-  description: { type: String, required: true },
   limitOfFruitToBeStored: { type: Number, required: true },
   amountInStorage: { type: Number, required: true, default: 0 },
 });
 
 const FruitStorageModel: Model<IFruitStorageDocument> =
-  model<IFruitStorageDocument>("Fruit", fruitSchema);
+  model<IFruitStorageDocument>("FruitStorage", fruitStorageSchema);
 
 export default FruitStorageModel;

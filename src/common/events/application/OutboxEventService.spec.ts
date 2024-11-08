@@ -3,17 +3,17 @@ import {
   connectToDatabase,
   disconnectFromDatabase,
 } from "../../../config/database";
-import { FRUIT_STORAGE_EVENTS } from "../../../modules/fruitStorage/domain/constants/events.constant";
 import outboxEventRepository from "../infrastructure/OutboxEventRepository";
 import domainEventEmitterService from "./DomainEventEmitterService";
 import { OutboxEventService } from "./OutboxEventService";
 import { OutboxEventStatus } from "../domain/enums/OutboxEventStatus.enum";
+import { FRUIT_EVENTS } from "../../../modules/fruit/domain/constants/events.constant";
 
 dotenv.config();
 
 describe("OutboxEventService", () => {
   let outboxEventService: OutboxEventService;
-  const eventType = FRUIT_STORAGE_EVENTS.CREATE;
+  const eventType = FRUIT_EVENTS.CREATE;
   const eventPayload = {
     name: "Apple",
     description: "A description of an apple",
@@ -23,6 +23,7 @@ describe("OutboxEventService", () => {
 
   beforeAll(async () => {
     await connectToDatabase(process.env.MONGODB_URI_TEST || "");
+    await outboxEventRepository.deleteAll();
     outboxEventService = new OutboxEventService(
       domainEventEmitterService,
       outboxEventRepository,
@@ -34,6 +35,10 @@ describe("OutboxEventService", () => {
   });
 
   beforeEach(async () => {
+    await outboxEventRepository.deleteAll();
+  });
+
+  afterEach(async () => {
     await outboxEventRepository.deleteAll();
   });
 
@@ -66,9 +71,8 @@ describe("OutboxEventService", () => {
 
       await outboxEventService.deleteAllEvents();
 
-      const afterDeletionLength = (await outboxEventRepository.findAll())
-        .length;
-      expect(afterDeletionLength).not.toBe(previousLength);
+      const afterDeletion = await outboxEventRepository.findAll();
+      expect(afterDeletion.length).not.toBe(previousLength);
     });
   });
 

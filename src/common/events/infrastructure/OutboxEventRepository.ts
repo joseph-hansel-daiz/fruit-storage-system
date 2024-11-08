@@ -21,7 +21,7 @@ export class OutboxEventRepository implements IOutboxEventRepository {
   }
 
   public async findAll(): Promise<OutboxEvent[]> {
-    const documents = await OutboxEventModel.find();
+    const documents = await OutboxEventModel.find().lean();
     return documents.map((document) => {
       return OutboxMap.toDomain(document);
     });

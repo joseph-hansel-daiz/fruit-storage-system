@@ -7,31 +7,29 @@ import { FRUIT_STORAGE_ERRORS } from "../../domain/constants/errors.constant";
 import { FruitStorage } from "../../domain/entities/FruitStorage";
 import FruitStorageMap from "../FruitStorageMapper";
 import FruitStorageModel from "./FruitStorageModel";
-import { MongoFruitRepository } from "./MongoFruitRepository";
+import { MongoFruitStorageRepository } from "./MongoFruitStorageRepository";
 
 dotenv.config();
 
-describe("MongoFruitRepository Unit Tests", () => {
-  let fruitStorageRepository: MongoFruitRepository;
+describe("MongoFruitStorageRepository Unit Tests", () => {
+  let fruitStorageRepository: MongoFruitStorageRepository;
   let fruitStorage: FruitStorage;
 
   const fruitStorageData = {
     name: "Apple",
-    description: "A description an apple",
     limitOfFruitToBeStored: 10,
     amountInStorage: 5,
   };
 
   const otherFruitStorageData = {
     name: "Orange",
-    description: "A description of an orange",
     limitOfFruitToBeStored: 10,
     amountInStorage: 5,
   };
 
   beforeAll(async () => {
     await connectToDatabase(process.env.MONGODB_URI_TEST || "");
-    fruitStorageRepository = new MongoFruitRepository();
+    fruitStorageRepository = new MongoFruitStorageRepository();
   });
 
   afterAll(async () => {
@@ -41,10 +39,10 @@ describe("MongoFruitRepository Unit Tests", () => {
   beforeEach(async () => {
     fruitStorage = FruitStorage.create(
       fruitStorageData.name,
-      fruitStorageData.description,
       fruitStorageData.limitOfFruitToBeStored,
       fruitStorageData.amountInStorage,
     );
+    await FruitStorageModel.deleteMany({});
   });
 
   afterEach(async () => {
@@ -61,10 +59,9 @@ describe("MongoFruitRepository Unit Tests", () => {
       );
 
       expect(result.name).toBe(fruitStorageData.name);
-      expect(result.description).toBe(fruitStorageData.description);
     });
 
-    it("should throw an error if the fruit is not found", async () => {
+    it("should throw an error if the fruit storage is not found", async () => {
       await expect(
         fruitStorageRepository.findByName(otherFruitStorageData.name),
       ).rejects.toThrow(FRUIT_STORAGE_ERRORS.CANNOT_READ);
@@ -77,10 +74,9 @@ describe("MongoFruitRepository Unit Tests", () => {
 
       const savedFruit = await FruitStorageModel.findOne({
         name: fruitStorage.name,
-      });
+      }).lean();
       expect(savedFruit).not.toBeNull();
       expect(savedFruit?.name).toBe(fruitStorageData.name);
-      expect(savedFruit?.description).toBe(fruitStorageData.description);
     });
   });
 
@@ -89,28 +85,31 @@ describe("MongoFruitRepository Unit Tests", () => {
       const fruit = FruitStorageMap.ToMongoDocument(fruitStorage);
       await fruit.save();
 
-      fruitStorage.updateDescription(otherFruitStorageData.description);
+      fruitStorage.updateLimitOfFruitToBeStored(
+        otherFruitStorageData.limitOfFruitToBeStored,
+      );
 
       await fruitStorageRepository.update(fruitStorage);
 
       const updatedFruitDocument = await FruitStorageModel.findOne({
         name: fruitStorageData.name,
-      });
-      expect(updatedFruitDocument?.description).toBe(
-        otherFruitStorageData.description,
+      }).lean();
+
+      expect(updatedFruitDocument?.limitOfFruitToBeStored).toBe(
+        otherFruitStorageData.limitOfFruitToBeStored,
       );
     });
   });
 
   describe("delete", () => {
-    it("should delete a fruit by name", async () => {
+    it("should delete a fruit storage by name", async () => {
       const fruit = FruitStorageMap.ToMongoDocument(fruitStorage);
       await fruit.save();
 
       expect(
         await FruitStorageModel.findOne({
           name: fruitStorageData.name,
-        }),
+        }).lean(),
       ).not.toBeNull();
 
       await fruitStorageRepository.delete(fruitStorageData.name);
@@ -118,7 +117,7 @@ describe("MongoFruitRepository Unit Tests", () => {
       expect(
         await FruitStorageModel.findOne({
           name: fruitStorageData.name,
-        }),
+        }).lean(),
       ).toBeNull();
     });
   });
@@ -139,15 +138,15 @@ describe("MongoFruitRepository Unit Tests", () => {
   });
 
   describe("deleteAll", () => {
-    it("should delete all fruits in storage", async () => {
+    it("should delete all fruits storages in storage", async () => {
       await FruitStorageModel.insertMany([
         fruitStorageData,
         otherFruitStorageData,
       ]);
-      expect((await FruitStorageModel.find()).length).toBe(2);
+      expect((await FruitStorageModel.find().lean()).length).toBe(2);
 
       await fruitStorageRepository.deleteAll();
-      expect((await FruitStorageModel.find()).length).toBe(0);
+      expect((await FruitStorageModel.find().lean()).length).toBe(0);
     });
   });
 });

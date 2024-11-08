@@ -1,11 +1,11 @@
 import { EventEmitter } from "events";
 import { OutboxEvent } from "../domain/OutboxEvent";
 import { DomainEventEmitterService } from "./DomainEventEmitterService";
-import { FRUIT_STORAGE_EVENTS } from "../../../modules/fruitStorage/domain/constants/events.constant";
+import { FRUIT_EVENTS } from "../../../modules/fruit/domain/constants/events.constant";
 
 describe("DomainEventEmitterService", () => {
   let eventEmitterService: DomainEventEmitterService;
-  const eventType = FRUIT_STORAGE_EVENTS.CREATE;
+  const eventType = FRUIT_EVENTS.CREATE;
   const eventPayload = {
     name: "Apple",
     description: "A description of an apple",

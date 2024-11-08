@@ -4,6 +4,8 @@ import { connectToDatabase } from "./config/database";
 import { schema } from "./schema";
 import dotenv from "dotenv";
 import "./common/cron";
+import "./modules/fruitStorage/subscriptions";
+import "./modules/fruit/subscriptions";
 
 dotenv.config();
 

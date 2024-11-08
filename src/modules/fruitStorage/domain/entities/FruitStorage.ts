@@ -1,32 +1,23 @@
 import { AppError } from "../../../../common/core/error/AppError";
 import { FRUIT_STORAGE_ERRORS } from "../constants/errors.constant";
-import { FruitDescription } from "../value-objects/FruitDescription";
-import { FruitName } from "../value-objects/FruitName";
 
 export class FruitStorage {
-  private _name: FruitName;
-  private _description: FruitDescription;
+  private _name: string;
   private _limitOfFruitToBeStored: number;
   private _amountInStorage: number;
 
   private constructor(
-    name: FruitName,
-    description: FruitDescription,
+    name: string,
     limitOfFruitToBeStored: number,
     amountInStorage: number,
   ) {
     this._name = name;
-    this._description = description;
     this._limitOfFruitToBeStored = limitOfFruitToBeStored;
     this._amountInStorage = amountInStorage;
   }
 
   public get name(): string {
-    return this._name.value;
-  }
-
-  public get description() {
-    return this._description.value;
+    return this._name;
   }
 
   public get limitOfFruitToBeStored() {
@@ -61,27 +52,15 @@ export class FruitStorage {
     this._amountInStorage -= amount;
   }
 
-  public updateDescription(description: string): void {
-    this._description = FruitDescription.create(description);
-  }
-
   public updateLimitOfFruitToBeStored(limitOfFruitToBeStored: number): void {
     this._limitOfFruitToBeStored = limitOfFruitToBeStored;
   }
 
   public static create(
     name: string,
-    description: string,
     limitOfFruitToBeStored: number,
     amountInStorage: number = 0,
   ): FruitStorage {
-    const fruitName = FruitName.create(name);
-    const fruitDescription = FruitDescription.create(description);
-    return new FruitStorage(
-      fruitName,
-      fruitDescription,
-      limitOfFruitToBeStored,
-      amountInStorage,
-    );
+    return new FruitStorage(name, limitOfFruitToBeStored, amountInStorage);
   }
 }

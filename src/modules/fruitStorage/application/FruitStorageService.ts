@@ -11,33 +11,25 @@ import fruitStorageRepository from "../infrastructure/FruitStorageRepository";
 
 export class FruitStorageService {
   constructor(
-    private fruitRepository: IFruitStorageRepository,
+    private fruitStorageRepository: IFruitStorageRepository,
     private outboxEventService: OutboxEventService,
   ) {}
 
   public async createFruitStorage(
     name: string,
-    description: string,
     limitOfFruitToBeStored: number,
   ): Promise<FruitStorage> {
     try {
-      const isExistingFruitStorage = await this.fruitRepository.exists(name);
+      const isExistingFruitStorage =
+        await this.fruitStorageRepository.exists(name);
       if (isExistingFruitStorage) {
         throw AppError.KnownError.create(
           FRUIT_STORAGE_ERRORS.CANNOT_CREATE_EXISTING_FRUIT,
         );
       }
 
-      const fruit = FruitStorage.create(
-        name,
-        description,
-        limitOfFruitToBeStored,
-      );
-      await this.fruitRepository.save(fruit);
-      await this.outboxEventService.createEvent(
-        FRUIT_STORAGE_EVENTS.CREATE,
-        FruitStorageMap.toDTO(fruit),
-      );
+      const fruit = FruitStorage.create(name, limitOfFruitToBeStored);
+      await this.fruitStorageRepository.save(fruit);
       return fruit;
     } catch (error) {
       throw AppError.identifyError(error);
@@ -46,21 +38,14 @@ export class FruitStorageService {
 
   public async updateFruitStorage(
     name: string,
-    description: string,
     limitOfFruitToBeStored: number,
   ): Promise<FruitStorage> {
     try {
-      const existingFruit = await this.fruitRepository.findByName(name);
-
-      existingFruit.updateDescription(description);
-      existingFruit.updateLimitOfFruitToBeStored(limitOfFruitToBeStored);
-
-      await this.fruitRepository.update(existingFruit);
-      await this.outboxEventService.createEvent(
-        FRUIT_STORAGE_EVENTS.UPDATE,
-        FruitStorageMap.toDTO(existingFruit),
-      );
-      return existingFruit;
+      const existingFruitStorage =
+        await this.fruitStorageRepository.findByName(name);
+      existingFruitStorage.updateLimitOfFruitToBeStored(limitOfFruitToBeStored);
+      await this.fruitStorageRepository.update(existingFruitStorage);
+      return existingFruitStorage;
     } catch (error) {
       throw AppError.identifyError(error);
     }
@@ -71,7 +56,7 @@ export class FruitStorageService {
     forceDelete: boolean = false,
   ): Promise<void> {
     try {
-      const existingFruit = await this.fruitRepository.findByName(name);
+      const existingFruit = await this.fruitStorageRepository.findByName(name);
 
       if (!forceDelete && existingFruit.amountInStorage > 0) {
         throw AppError.KnownError.create(
@@ -79,7 +64,8 @@ export class FruitStorageService {
         );
       }
 
-      await this.fruitRepository.delete(name);
+      await this.fruitStorageRepository.delete(name);
+
       await this.outboxEventService.createEvent(
         FRUIT_STORAGE_EVENTS.DELETE,
         FruitStorageMap.toDTO(existingFruit),
@@ -91,10 +77,10 @@ export class FruitStorageService {
 
   public async storeFruit(name: string, amount: number): Promise<FruitStorage> {
     try {
-      const fruit = await this.fruitRepository.findByName(name);
+      const fruit = await this.fruitStorageRepository.findByName(name);
 
       fruit.storeFruit(amount);
-      await this.fruitRepository.update(fruit);
+      await this.fruitStorageRepository.update(fruit);
 
       return fruit;
     } catch (error) {
@@ -107,10 +93,10 @@ export class FruitStorageService {
     amount: number,
   ): Promise<FruitStorage> {
     try {
-      const fruit = await this.fruitRepository.findByName(name);
+      const fruit = await this.fruitStorageRepository.findByName(name);
 
       fruit.removeFruit(amount);
-      await this.fruitRepository.update(fruit);
+      await this.fruitStorageRepository.update(fruit);
 
       return fruit;
     } catch (error) {
@@ -118,9 +104,9 @@ export class FruitStorageService {
     }
   }
 
-  public async findFruit(name: string): Promise<FruitStorage> {
+  public async findFruitStorage(name: string): Promise<FruitStorage> {
     try {
-      return this.fruitRepository.findByName(name);
+      return this.fruitStorageRepository.findByName(name);
     } catch (error) {
       throw AppError.identifyError(error);
     }
@@ -128,7 +114,7 @@ export class FruitStorageService {
 
   public async listFruitStorages(): Promise<FruitStorage[]> {
     try {
-      return this.fruitRepository.getAll();
+      return this.fruitStorageRepository.getAll();
     } catch (error) {
       throw AppError.identifyError(error);
     }
@@ -136,7 +122,7 @@ export class FruitStorageService {
 
   public async deleteAllFruitsStorages(): Promise<void> {
     try {
-      await this.fruitRepository.deleteAll();
+      await this.fruitStorageRepository.deleteAll();
     } catch (error) {
       throw AppError.identifyError(error);
     }

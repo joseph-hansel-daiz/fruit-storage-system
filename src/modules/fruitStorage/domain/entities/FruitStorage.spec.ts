@@ -10,11 +10,9 @@ describe("FruitStorage", () => {
     it("should create a new FruitStorage instance with valid inputs", () => {
       const fruitStorage = FruitStorage.create(
         validName,
-        validDescription,
         initialLimit,
       );
       expect(fruitStorage.name).toBe(validName);
-      expect(fruitStorage.description).toBe(validDescription);
       expect(fruitStorage.limitOfFruitToBeStored).toBe(initialLimit);
       expect(fruitStorage.amountInStorage).toBe(0);
     });
@@ -24,7 +22,6 @@ describe("FruitStorage", () => {
     it("should add the specified amount of fruit to storage", () => {
       const fruitStorage = FruitStorage.create(
         validName,
-        validDescription,
         initialLimit,
       );
       fruitStorage.storeFruit(20);
@@ -34,7 +31,6 @@ describe("FruitStorage", () => {
     it("should throw an error if the amount is not positive", () => {
       const fruitStorage = FruitStorage.create(
         validName,
-        validDescription,
         initialLimit,
       );
       expect(() => fruitStorage.storeFruit(-5)).toThrow(
@@ -45,7 +41,6 @@ describe("FruitStorage", () => {
     it("should throw an error if the amount exceeds storage limit", () => {
       const fruitStorage = FruitStorage.create(
         validName,
-        validDescription,
         initialLimit,
         90,
       );
@@ -59,7 +54,6 @@ describe("FruitStorage", () => {
     it("should remove the specified amount of fruit from storage", () => {
       const fruitStorage = FruitStorage.create(
         validName,
-        validDescription,
         initialLimit,
         50,
       );
@@ -70,7 +64,6 @@ describe("FruitStorage", () => {
     it("should throw an error if the amount is not positive", () => {
       const fruitStorage = FruitStorage.create(
         validName,
-        validDescription,
         initialLimit,
       );
       expect(() => fruitStorage.removeFruit(-5)).toThrow(
@@ -81,7 +74,6 @@ describe("FruitStorage", () => {
     it("should throw an error if there is insufficient fruit to remove", () => {
       const fruitStorage = FruitStorage.create(
         validName,
-        validDescription,
         initialLimit,
         10,
       );
@@ -91,24 +83,10 @@ describe("FruitStorage", () => {
     });
   });
 
-  describe("updateDescription", () => {
-    it("should update the description of the fruit storage", () => {
-      const fruitStorage = FruitStorage.create(
-        validName,
-        validDescription,
-        initialLimit,
-      );
-      const newDescription = "Ripe apples ready for sale";
-      fruitStorage.updateDescription(newDescription);
-      expect(fruitStorage.description).toBe(newDescription);
-    });
-  });
-
   describe("updateLimitOfFruitToBeStored", () => {
     it("should update the storage limit", () => {
       const fruitStorage = FruitStorage.create(
         validName,
-        validDescription,
         initialLimit,
       );
       const newLimit = 200;

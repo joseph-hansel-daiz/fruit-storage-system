@@ -31,37 +31,25 @@ describe("FruitStorageService", () => {
     await outboxEventService.deleteAllEvents();
   });
 
+  afterEach(async () => {
+    await fruitStorageRepository.deleteAll();
+    await outboxEventService.deleteAllEvents();
+  });
+
   describe("createFruitStorage", () => {
-    it("should create and save a new fruit storage, then emit an event", async () => {
-      await fruitStorageService.createFruitStorage(
-        "Apple",
-        "Storage for apples",
-        100,
-      );
+    it("should create and save a new fruit storage", async () => {
+      await fruitStorageService.createFruitStorage("Apple", 100);
 
       const storedFruit = await fruitStorageRepository.findByName("Apple");
       expect(storedFruit).toBeDefined();
       expect(storedFruit?.name).toBe("Apple");
-
-      const events = await outboxEventService.findAllEvents();
-      expect(
-        events.some((event) => event.type === FRUIT_STORAGE_EVENTS.CREATE),
-      ).toBe(true);
     });
 
     it("should throw an error if fruit storage with the same name exists", async () => {
-      await fruitStorageService.createFruitStorage(
-        "Apple",
-        "Storage for apples",
-        100,
-      );
+      await fruitStorageService.createFruitStorage("Apple", 100);
 
       await expect(
-        fruitStorageService.createFruitStorage(
-          "Apple",
-          "Another storage for apples",
-          50,
-        ),
+        fruitStorageService.createFruitStorage("Apple", 50),
       ).rejects.toThrow(AppError.KnownError);
 
       const fruitStorages = await fruitStorageRepository.getAll();
@@ -70,31 +58,20 @@ describe("FruitStorageService", () => {
   });
 
   describe("updateFruitStorage", () => {
-    it("should update the fruit storage and emit an update event", async () => {
-      await fruitStorageService.createFruitStorage(
-        "Apple",
-        "Initial description",
-        50,
-      );
+    it("should update the fruit storage", async () => {
+      await fruitStorageService.createFruitStorage("Apple", 50);
       const updatedFruit = await fruitStorageService.updateFruitStorage(
         "Apple",
-        "Updated description",
         80,
       );
 
-      expect(updatedFruit.description).toBe("Updated description");
       expect(updatedFruit.limitOfFruitToBeStored).toBe(80);
-
-      const events = await outboxEventService.findAllEvents();
-      expect(
-        events.some((event) => event.type === FRUIT_STORAGE_EVENTS.UPDATE),
-      ).toBe(true);
     });
   });
 
   describe("deleteFruitStorage", () => {
-    it("should delete the fruit storage if forceDelete is true", async () => {
-      await fruitStorageService.createFruitStorage("Apple", "Description", 100);
+    it("should delete the fruit storage if forceDelete is true, and emit a domain event", async () => {
+      await fruitStorageService.createFruitStorage("Apple", 100);
       await fruitStorageService.deleteFruitStorage("Apple", true);
 
       await expect(fruitStorageRepository.findByName("Apple")).rejects.toThrow(
@@ -108,11 +85,7 @@ describe("FruitStorageService", () => {
     });
 
     it("should throw an error if deleting without forceDelete and amountInStorage > 0", async () => {
-      const fruit = await fruitStorageService.createFruitStorage(
-        "Apple",
-        "Description",
-        100,
-      );
+      const fruit = await fruitStorageService.createFruitStorage("Apple", 100);
       fruit.storeFruit(10);
       await fruitStorageRepository.update(fruit);
 
@@ -124,7 +97,7 @@ describe("FruitStorageService", () => {
 
   describe("storeFruit", () => {
     it("should increase the amount of stored fruit", async () => {
-      await fruitStorageService.createFruitStorage("Apple", "Description", 100);
+      await fruitStorageService.createFruitStorage("Apple", 100);
       const updatedFruit = await fruitStorageService.storeFruit("Apple", 20);
 
       expect(updatedFruit.amountInStorage).toBe(20);
@@ -136,11 +109,7 @@ describe("FruitStorageService", () => {
 
   describe("removeFruit", () => {
     it("should decrease the amount of stored fruit", async () => {
-      const fruit = await fruitStorageService.createFruitStorage(
-        "Apple",
-        "Description",
-        100,
-      );
+      const fruit = await fruitStorageService.createFruitStorage("Apple", 100);
       fruit.storeFruit(50);
       await fruitStorageRepository.update(fruit);
 
@@ -151,12 +120,8 @@ describe("FruitStorageService", () => {
 
   describe("findFruit", () => {
     it("should return the fruit storage if it exists", async () => {
-      const fruit = await fruitStorageService.createFruitStorage(
-        "Apple",
-        "Description",
-        100,
-      );
-      const foundFruit = await fruitStorageService.findFruit("Apple");
+      const fruit = await fruitStorageService.createFruitStorage("Apple", 100);
+      const foundFruit = await fruitStorageService.findFruitStorage("Apple");
 
       expect(foundFruit.name).toBe(fruit.name);
     });
@@ -164,12 +129,8 @@ describe("FruitStorageService", () => {
 
   describe("listFruitStorages", () => {
     it("should return all fruit storages", async () => {
-      await fruitStorageService.createFruitStorage("Apple", "Description", 100);
-      await fruitStorageService.createFruitStorage(
-        "Banana",
-        "Storage for bananas",
-        50,
-      );
+      await fruitStorageService.createFruitStorage("Apple", 100);
+      await fruitStorageService.createFruitStorage("Banana", 50);
 
       const fruits = await fruitStorageService.listFruitStorages();
       expect(fruits.length).toBe(2);
@@ -178,7 +139,7 @@ describe("FruitStorageService", () => {
 
   describe("deleteAllFruitsStorages", () => {
     it("should delete all fruit storages", async () => {
-      await fruitStorageService.createFruitStorage("Apple", "Description", 100);
+      await fruitStorageService.createFruitStorage("Apple", 100);
       await fruitStorageService.deleteAllFruitsStorages();
 
       const allFruits = await fruitStorageRepository.getAll();

@@ -5,7 +5,7 @@ import { FruitStorage } from "../../domain/entities/FruitStorage";
 import FruitStorageMap from "../FruitStorageMapper";
 import FruitStorageModel from "./FruitStorageModel";
 
-export class MongoFruitRepository implements IFruitStorageRepository {
+export class MongoFruitStorageRepository implements IFruitStorageRepository {
   public async exists(name: string): Promise<boolean> {
     const document = await FruitStorageModel.findOne({ name }).lean();
     return !!document;
@@ -30,7 +30,7 @@ export class MongoFruitRepository implements IFruitStorageRepository {
     await FruitStorageModel.findOneAndUpdate(
       { name: fruit.name },
       FruitStorageMap.toDTO(fruit),
-    );
+    ).lean();
   }
 
   public async delete(name: string): Promise<void> {

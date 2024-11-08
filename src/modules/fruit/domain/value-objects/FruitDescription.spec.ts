@@ -1,5 +1,5 @@
-import { FruitDescription } from "./FruitDescription";
 import { FRUIT_STORAGE_ERRORS } from "../constants/errors.constant";
+import { FruitDescription } from "./FruitDescription";
 
 describe("FruitDescription", () => {
   describe("create", () => {
