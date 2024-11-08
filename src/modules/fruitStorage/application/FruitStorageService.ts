@@ -6,7 +6,7 @@ import { IFruitStorageRepository } from "../adapter/IFruitStorageRepository";
 import { FRUIT_STORAGE_ERRORS } from "../domain/constants/errors.constant";
 import { FRUIT_STORAGE_EVENTS } from "../domain/constants/events.constant";
 import { FruitStorage } from "../domain/entities/FruitStorage";
-import FruitStorageMap from "../infrastructure/FruitMapper";
+import FruitStorageMap from "../infrastructure/FruitStorageMapper";
 import fruitStorageRepository from "../infrastructure/FruitStorageRepository";
 
 export class FruitStorageService {

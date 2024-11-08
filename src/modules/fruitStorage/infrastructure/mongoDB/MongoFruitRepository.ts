@@ -2,7 +2,7 @@ import { AppError } from "../../../../common/core/error/AppError";
 import { IFruitStorageRepository } from "../../adapter/IFruitStorageRepository";
 import { FRUIT_STORAGE_ERRORS } from "../../domain/constants/errors.constant";
 import { FruitStorage } from "../../domain/entities/FruitStorage";
-import FruitStorageMap from "../FruitMapper";
+import FruitStorageMap from "../FruitStorageMapper";
 import FruitStorageModel from "./FruitStorageModel";
 
 export class MongoFruitRepository implements IFruitStorageRepository {

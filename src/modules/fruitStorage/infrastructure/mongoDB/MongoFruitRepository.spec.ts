@@ -5,7 +5,7 @@ import {
 } from "../../../../config/database";
 import { FRUIT_STORAGE_ERRORS } from "../../domain/constants/errors.constant";
 import { FruitStorage } from "../../domain/entities/FruitStorage";
-import FruitStorageMap from "../FruitMapper";
+import FruitStorageMap from "../FruitStorageMapper";
 import FruitStorageModel from "./FruitStorageModel";
 import { MongoFruitRepository } from "./MongoFruitRepository";
 
